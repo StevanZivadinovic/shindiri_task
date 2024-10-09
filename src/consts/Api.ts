@@ -30,8 +30,8 @@ export const fetchCharacters = async ({ pageParam = 1 }) => {
   };
 
   export const fetchMultipleCharacterDataInLocation = async (ids:number[]) => {
-    const { data } = await axios.get(`${base}/character`, {
-        params: { ids : ids }
+    const { data } = await axios.get(`${base}/character/${ids}`, {
+   
     });
     return data;
   };

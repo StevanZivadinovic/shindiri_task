@@ -4,14 +4,14 @@ import { fetchMultipleCharacterDataInLocation } from "../consts/Api";
 import { useQuery } from "react-query";
 
 export const CharactersList = ({ data1 }: any) => {
-    
+
   const residentIds = getNumbersFromEndOfURL(data1?.residents);
   console.log(residentIds);
 
   const {
-    data: characterData,
-    error: characterError,
-    isLoading: CharacterIsLoading,
+    data,
+    error,
+    isLoading,
   } = useQuery(
     ["character", residentIds],
     () => fetchMultipleCharacterDataInLocation(residentIds),
@@ -19,12 +19,12 @@ export const CharactersList = ({ data1 }: any) => {
       enabled: !!residentIds,
     }
   );
-  console.log(characterData);
+  console.log(data);
   return (
         <div className="container mx-auto p-4">
           <h1 className="text-3xl font-bold mb-6">Characters</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {characterData?.results?.map((character: any) => (
+            {data?.map((character: any) => (
               <div
                 key={character.id}
                 className="bg-white shadow-lg rounded-lg overflow-hidden"
