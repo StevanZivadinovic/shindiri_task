@@ -42,7 +42,7 @@ const Characters: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {data?.results &&
             data?.results?.map((character: any) => (
-              <Link to={`/characters/${12}`} key={character.id}>
+              <Link to={`/characters/${character.id}`} key={character.id}>
                 <div className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center">
                   <img
                     src={character.image}
