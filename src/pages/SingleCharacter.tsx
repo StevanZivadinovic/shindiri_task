@@ -1,16 +1,9 @@
-import { useQuery } from "react-query";
-import { fetchSingleCharacterDetails } from "../consts/Api";
+import { useSingleCharacterDetailsQuery } from "../consts/Api";
 import { useParams, Link } from "react-router-dom";
 
 const SingleCharacter = () => {
   const { id } = useParams();
-  const { data, error, isLoading } = useQuery(
-    ["character", id],
-    () => fetchSingleCharacterDetails(Number(id)),
-    {
-      enabled: !!id,
-    }
-  );
+  const { data, error, isLoading } = useSingleCharacterDetailsQuery(id)
 
   if (isLoading)
     return <p className="text-center text-lg">Loading character details...</p>;
@@ -22,10 +15,9 @@ const SingleCharacter = () => {
     );
 
   const { name, status, gender, species, image, location, episode } = data;
-  const urlObj = location && new URL(location?.url);
-  const locationPath = urlObj?.pathname?.replace("/api/", "");
-  const episodeId = episode.length === 1 && episode?.split("/").pop();
-
+  const urlObj = location?.url?.length>0 ? new URL(location?.url) :'';
+  const locationPath = urlObj!=='' ? urlObj?.pathname?.replace("/api/", ""):'#';
+  const episodeId = episode.length === 1 && episode[0]?.split("/").pop();
   return (
     <div className="container mx-auto p-4">
       <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center">

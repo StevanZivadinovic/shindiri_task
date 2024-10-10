@@ -1,17 +1,10 @@
 import { useParams } from 'react-router-dom';
-import { fetchSingleLocationData } from '../consts/Api';
-import { useQuery } from 'react-query';
+import { useSingleLocationDataQuery } from '../consts/Api';
 import { CharactersList } from '../components/CharactersList';
 
 const SingleLocation = () => {
   const { id } = useParams();
-  const { data, isLoading, isError } = useQuery(
-    ['location', id],
-    () => fetchSingleLocationData(Number(id)),
-    {
-      enabled: !!id,
-    }
-  );
+  const { data, isLoading, isError } = useSingleLocationDataQuery(id)
 
 
   if (isLoading) return <p className="text-center text-lg">Loading...</p>;

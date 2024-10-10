@@ -1,18 +1,12 @@
-import { useQuery } from "react-query";
-import { fetchSingleEpisodeDetails } from "../consts/Api";
+import {useEpisodeQuery} from "../consts/Api";
 import { useParams } from "react-router-dom";
 import { formatDate } from "../helperFunctions/global";
 import { CharactersList } from "../components/CharactersList";
 
 const SingleEpisode = () => {
   const { id } = useParams();
-  const { data, error, isLoading } = useQuery(
-    ["character", id],
-    () => fetchSingleEpisodeDetails(Number(id)),
-    {
-      enabled: !!id,
-    }
-  );
+  const { data, error, isLoading } = useEpisodeQuery(id);
+
 
   isLoading && <p className="text-center text-lg">Loading...</p>;
   error && <p className="text-red-500 text-center">Error loading episode.</p>;

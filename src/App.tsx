@@ -1,42 +1,19 @@
 import { Routes, Route, Link, Navigate, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
-import { useEffect, useState } from "react";
 import Characters from "./pages/Characters";
-import { logout } from "./auth";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase";
 import { CharacterProvider } from "./context/CharacterContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import SingleCharacter from "./pages/SingleCharacter";
 import SingleLocation from "./pages/SingleLocation";
 import SingleEpisode from "./pages/SingleEpisode";
+import { handleLogout } from "./helperFunctions/global";
+import useAuth from "./hooks/useAuth";
+
 const queryClient = new QueryClient();
 function App() {
-  const [authenticated, setAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { authenticated, setAuthenticated, loading, user } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      const userToken = localStorage.getItem("userToken");
-
-      if (user?.uid || (userToken && userToken?.length > 0)) {
-        setAuthenticated(true);
-      } else {
-        setAuthenticated(false);
-      }
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  });
-
-  const handleLogout = () => {
-    logout();
-    setAuthenticated(false);
-    navigate("/");
-  };
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -45,21 +22,29 @@ function App() {
       <CharacterProvider>
         <div>
           {/* Navigation Links */}
-          <nav className="p-4 flex justify-end">
-            <Link to="/characters" className="mr-4">
-              Characters
-            </Link>
-            <Link
-              to="#"
-              className="mr-4"
-              onClick={() => {
-                handleLogout();
-              }}
-            >
-              Logout
-            </Link>
+          <nav className="p-4 flex justify-between">
+            <div className="text-xl">
+              <h3>
+                <span>Logged as: </span>{" "}
+                <span className="font-bold">{user?.displayName}</span>
+              </h3>
+            </div>
+            <div className="">
+              <Link to="/characters" className="mr-4">
+                Characters
+              </Link>
+              <Link
+                to="#"
+                className="mr-4"
+                onClick={() => {
+                  handleLogout(setAuthenticated, navigate);
+                }}
+              >
+                Logout
+              </Link>
+            </div>
           </nav>
-          {/* Sve je moglo samo preko user objecta koji vraca firebase, ali posto u zahtevu zadatka stoji da se trazi i token
+          {/* Sve je moglo samo preko user objecta koji vraca firebase ili samo preko tokena, ali posto u zahtevu zadatka stoji da se trazi i token
   onda sam dodao da uslov za prikazivabje stranice bude i postojanje tokena u localStorage      
 */}
           <Routes>

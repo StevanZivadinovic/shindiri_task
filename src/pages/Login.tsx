@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../auth';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { handleSubmitLogin } from '../helperFunctions/global';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -10,31 +10,12 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!email || !password) {
-      setError('Both fields are required.');
-      return;
-    }
-    try {
-      await login(email, password);
-      setError('');
-      setEmail('');
-      setPassword('');
-      navigate("/characters");
-    } catch (error) {
-      if (error) {
-        setError("Netacni kredencijali!");
-      }
-    }
-  };
-
+ 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <form
         className="bg-white p-6 rounded shadow-md w-96"
-        onSubmit={handleSubmit}
+        onSubmit={(e)=>{handleSubmitLogin(e, email, password,setEmail,setPassword,setError,navigate )}}
       >
         <h1 className="text-xl font-bold mb-4">Login</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}

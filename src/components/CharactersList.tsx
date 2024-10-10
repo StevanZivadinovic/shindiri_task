@@ -1,7 +1,5 @@
-import React from "react";
 import { getNumbersFromEndOfURL } from "../helperFunctions/global";
-import { fetchMultipleCharacterDataInLocation } from "../consts/Api";
-import { useQuery } from "react-query";
+import { useMultipleCharacterDataInLocationQuery } from "../consts/Api";
 import { Link } from "react-router-dom";
 
 export const CharactersList = ({ data1 }: any) => {
@@ -11,13 +9,7 @@ export const CharactersList = ({ data1 }: any) => {
     ? getNumbersFromEndOfURL(data1?.characters)
     : [];
 
-  const { data, isLoading, isError } = useQuery(
-    ["character", residentIds],
-    () => fetchMultipleCharacterDataInLocation(residentIds),
-    {
-      enabled: !!residentIds,
-    }
-  );
+  const { data, isLoading, isError } = useMultipleCharacterDataInLocationQuery(residentIds)
 
   if (isLoading) return <p className="text-center text-lg">Loading...</p>;
   if (isError)

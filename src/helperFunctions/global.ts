@@ -1,3 +1,80 @@
+import { Dispatch, SetStateAction } from "react";
+import { login, logout, signup } from "../auth";
+import { NavigateFunction } from "react-router-dom";
+
+export const handleSubmitSignUp = async (
+  e: React.FormEvent,
+  name: string,
+  email: string,
+  password: string,
+  setName: Dispatch<SetStateAction<string>>,
+  setEmail: Dispatch<SetStateAction<string>>,
+  setPassword: Dispatch<SetStateAction<string>>,
+  setError: Dispatch<SetStateAction<string>>,
+  navigate: NavigateFunction
+) => {
+  e.preventDefault();
+
+  if (!name || !email || !password) {
+    setError("All fields are required.");
+    return;
+  }
+  try {
+    await signup(email, password, name);
+    setError("");
+    setName("");
+    setEmail("");
+    setPassword("");
+    navigate("/characters");
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.message.includes("auth/weak-password")) {
+        setError("Password should be at least 6 characters.");
+      } else if (error.message.includes("auth/email-already-in-use")) {
+        setError("Email is already in use.");
+      } else {
+        setError("An error occurred. Please try again.");
+      }
+    } else {
+      throw error;
+    }
+  }
+};
+
+export const handleSubmitLogin = async (
+  e: React.FormEvent,
+  email: string,
+  password: string,
+  setEmail: Dispatch<SetStateAction<string>>,
+  setPassword: Dispatch<SetStateAction<string>>,
+  setError: Dispatch<SetStateAction<string>>,
+  navigate: NavigateFunction
+) => {
+  e.preventDefault();
+
+  if (!email || !password) {
+    setError("Both fields are required.");
+    return;
+  }
+  try {
+    await login(email, password);
+    setError("");
+    setEmail("");
+    setPassword("");
+    navigate("/characters");
+  } catch (error) {
+    if (error) {
+      setError("Netacni kredencijali!");
+    }
+  }
+};
+
+export const handleLogout = (setAuthenticated:Dispatch<SetStateAction<boolean>>,navigate: NavigateFunction) => {
+  logout();
+  setAuthenticated(false);
+  navigate("/");
+};
+
 export const handleScroll = (
   fetchNextPage: any,
   hasNextPage: boolean,

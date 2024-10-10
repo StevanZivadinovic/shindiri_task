@@ -4,10 +4,11 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   fetchSignInMethodsForEmail,
+  updateProfile,
 } from "firebase/auth";
 
 // Sign up function
-export const signup = async (email: string, password: string) => {
+export const signup = async (email: string, password: string, name:string) => {
   try {
     const signInMethods = await fetchSignInMethodsForEmail(auth, email);
     if (signInMethods.length > 0) {
@@ -19,6 +20,8 @@ export const signup = async (email: string, password: string) => {
       email,
       password
     );
+    const user = userCredential.user;
+    await updateProfile(user, { displayName: name });
     const token = await userCredential.user.getIdToken();
     localStorage.setItem("userToken", token);
     return userCredential.user;

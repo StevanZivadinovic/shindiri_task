@@ -3,8 +3,7 @@
 import React, { useState } from "react";
 import { useCharacters } from "../context/CharacterContext";
 import useScrollFetch from "../hooks/useScrollFatch";
-import { useQuery } from "react-query";
-import { fetchSingleCharacter } from "../consts/Api";
+import { useSingleCharacterQuery } from "../consts/Api";
 import { Link } from "react-router-dom";
 
 const Characters: React.FC = () => {
@@ -12,13 +11,7 @@ const Characters: React.FC = () => {
     useCharacters();
   useScrollFetch(fetchNextPage, hasNextPage, isLoading);
   const [characterName, setCharacterName] = useState("");
-  const { data, isError:singleCharacterIsError, isLoading:singleCharacterisLoading } = useQuery(
-    ["character", characterName],
-    () => fetchSingleCharacter(characterName),
-    {
-      enabled: !!characterName,
-    }
-  );
+  const { data, isError:singleCharacterIsError, isLoading:singleCharacterisLoading } = useSingleCharacterQuery(characterName)
   if (singleCharacterisLoading) return <p className="text-center text-lg">Loading...</p>;
   if (singleCharacterIsError)
     return (
