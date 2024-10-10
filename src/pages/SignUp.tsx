@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signup } from "../auth";
@@ -21,28 +19,25 @@ const SignUp: React.FC = () => {
       return;
     }
     try {
-      const newCreatedUserData = await signup(email, password);
-      console.log(newCreatedUserData);
+      await signup(email, password);
       setError("");
       setName("");
       setEmail("");
       setPassword("");
       navigate("/characters");
     } catch (error) {
-         if (error instanceof Error) {
-            if (error.message.includes('auth/weak-password')) {
-                setError('Password should be at least 6 characters.');
-            } else if (error.message.includes('auth/email-already-in-use')) {
-                setError('Email is already in use.');
-            } else {
-                setError('An error occurred. Please try again.'); 
-            }
+      if (error instanceof Error) {
+        if (error.message.includes("auth/weak-password")) {
+          setError("Password should be at least 6 characters.");
+        } else if (error.message.includes("auth/email-already-in-use")) {
+          setError("Email is already in use.");
         } else {
-            throw error; 
+          setError("An error occurred. Please try again.");
         }
+      } else {
+        throw error;
+      }
     }
-
-
   };
 
   return (
@@ -79,27 +74,23 @@ const SignUp: React.FC = () => {
             required
           />
         </div>
-          <label htmlFor="password" className="block mb-2">
-            Password
-          </label>
+        <label htmlFor="password" className="block mb-2">
+          Password
+        </label>
         <div className="mb-4 relative">
           <input
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="border border-gray-300 rounded p-2 w-full"
             required
           />
-           <span
+          <span
             className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
             onClick={() => setShowPassword((prev) => !prev)}
           >
-            {showPassword ? (
-              <VisibilityOff />
-            ) : (
-              <Visibility />
-            )}
+            {showPassword ? <VisibilityOff /> : <Visibility />}
           </span>
         </div>
         <button

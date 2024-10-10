@@ -10,6 +10,7 @@ import { CharacterProvider } from "./context/CharacterContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import SingleCharacter from "./pages/SingleCharacter";
 import SingleLocation from "./pages/SingleLocation";
+import SingleEpisode from "./pages/SingleEpisode";
 const queryClient = new QueryClient();
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -18,7 +19,6 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log(user);
       const userToken = localStorage.getItem("userToken");
 
       if (user?.uid || (userToken && userToken?.length > 0)) {
@@ -32,12 +32,11 @@ function App() {
   });
 
   const handleLogout = () => {
-    console.log("haj");
     logout();
     setAuthenticated(false);
     navigate("/");
   };
-  console.log(authenticated);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -84,11 +83,17 @@ function App() {
             />
             <Route
               path="/characters/:id"
-              element={authenticated ? <SingleCharacter /> : <Navigate to="/" />}
+              element={
+                authenticated ? <SingleCharacter /> : <Navigate to="/" />
+              }
             />
-             <Route
+            <Route
               path="/location/:id"
               element={authenticated ? <SingleLocation /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/episode/:id"
+              element={authenticated ? <SingleEpisode /> : <Navigate to="/" />}
             />
           </Routes>
         </div>
