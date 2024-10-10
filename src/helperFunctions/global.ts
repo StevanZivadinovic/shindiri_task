@@ -113,7 +113,7 @@ export const getNumbersFromEndOfURL = (array: (string | null)[]): number[] => {
 
 export const formatDate = (date: string) => {
   const dateTime = new Date(date);
-  const formattedDate = dateTime.toISOString().slice(0, 10); // YYYY-MM-DD
-  const formattedTime = dateTime.toISOString().slice(11, 16);
+  const formattedDate = dateTime?.toISOString().slice(0, 10); // YYYY-MM-DD
+  const formattedTime = dateTime?.toISOString().slice(11, 16);
   return `${formattedDate} ${formattedTime}`;
 };

@@ -17,7 +17,7 @@ const SearchInput = ({ characterName, setCharacterName }: SearchInputType) => {
 
   useEffect(() => {
     return () => {
-      debouncedSetCharacterName.cancel();
+      debouncedSetCharacterName?.cancel();
     };
   }, [debouncedSetCharacterName]);
 
