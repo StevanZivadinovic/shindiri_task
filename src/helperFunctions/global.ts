@@ -69,10 +69,14 @@ export const handleSubmitLogin = async (
   }
 };
 
-export const handleLogout = (setAuthenticated:Dispatch<SetStateAction<boolean>>,navigate: NavigateFunction) => {
-  logout();
-  setAuthenticated(false);
-  navigate("/");
+export const handleLogout = async (setAuthenticated:Dispatch<SetStateAction<boolean>>,navigate: NavigateFunction) => {
+  try {
+    await logout();
+    setAuthenticated(false);
+    navigate("/");
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const handleScroll = (

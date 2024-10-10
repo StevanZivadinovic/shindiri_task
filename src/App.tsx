@@ -22,13 +22,15 @@ function App() {
       <CharacterProvider>
         <div>
           {/* Navigation Links */}
-          <nav className="p-4 flex justify-between">
-            <div className="text-xl">
+          <nav className={`p-4 flex ${authenticated ? 'justify-between' :'justify-end'}`}>
+           {
+            authenticated && <div className="text-xl">
               <h3>
                 <span>Logged as: </span>{" "}
                 <span className="font-bold">{user?.displayName}</span>
               </h3>
             </div>
+           } 
             <div className="">
               <Link to="/characters" className="mr-4">
                 Characters

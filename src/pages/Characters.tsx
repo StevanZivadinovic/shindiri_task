@@ -5,33 +5,35 @@ import { useCharacters } from "../context/CharacterContext";
 import useScrollFetch from "../hooks/useScrollFatch";
 import { useSingleCharacterQuery } from "../consts/Api";
 import { Link } from "react-router-dom";
+import SearchInput from "../components/SearchInput";
 
 const Characters: React.FC = () => {
-  const { characters, isLoading, isError, fetchNextPage, hasNextPage } =
-    useCharacters();
-  useScrollFetch(fetchNextPage, hasNextPage, isLoading);
   const [characterName, setCharacterName] = useState("");
+  const { characters, isLoading, isError, fetchNextPage, hasNextPage } =
+  useCharacters();
+  useScrollFetch(fetchNextPage, hasNextPage, isLoading);
+  
   const { data, isError:singleCharacterIsError, isLoading:singleCharacterisLoading } = useSingleCharacterQuery(characterName)
-  if (singleCharacterisLoading) return <p className="text-center text-lg">Loading...</p>;
+  if (singleCharacterisLoading) return (
+    <div className="container mx-auto p-4 relative">
+    <SearchInput characterName={characterName} setCharacterName={setCharacterName}/>
+    <p className="text-center text-lg">Loading...</p>
+  </div>
+  
+
+);
   if (singleCharacterIsError)
     return (
+      <div className="container mx-auto p-4 relative">
+        <SearchInput characterName={characterName} setCharacterName={setCharacterName}/>
       <p className="text-center text-red-500">
         Error loading character list...
       </p>
+      </div>
     );
   return (
     <div className="container mx-auto p-4 relative">
-      <div className="mb-4 sticky top-0">
-        <input
-          type="text"
-          placeholder="Search characters..."
-          value={characterName}
-          onChange={(e) => {
-            setCharacterName(e.target.value);
-          }}
-          className="border border-gray-300 rounded p-2 w-full "
-        />
-      </div>
+      <SearchInput characterName={characterName} setCharacterName={setCharacterName}/>
       {isLoading && <p className="text-center text-lg">Loading...</p>}
       {isError && (
         <p className="text-red-500 text-center">Error loading characters.</p>
